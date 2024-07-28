@@ -6,7 +6,6 @@
 
 #include"generation.h"
 
-
 int main(int argc, char* argv[]) {
 
     std::string contents;
@@ -22,20 +21,20 @@ int main(int argc, char* argv[]) {
     std::vector<Token> tokens = tokenizer.tokenize();
 
     Parser parser(tokens);
-    std::optional<NodeExit> tree = parser.parse();
+    std::optional<NodeProg> prog = parser.parse_prog();
 
-    if (!tree.has_value())
+    if (!prog.has_value())
     {
         std::cerr << "No exitr statment found";
         exit(EXIT_FAILURE);
     }
 
-    Generator generator(tree.value());
+    Generator generator(prog.value());
 
 
     {
         std::fstream file("out.asm", std::ios::out);
-        file << generator.generate();
+        file << generator.gen_prog();
     }
 
     system("nasm -felf64 out.asm");
