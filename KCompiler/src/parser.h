@@ -20,7 +20,7 @@ public:
 
     std::optional <NodeExpr> parse_expr()
     {
-        if (peak().has_value() && peak().value().type == TokenType::int_lit)
+        if (peek().has_value() && peek().value().type == TokenType::int_lit)
         {
             return NodeExpr{ .int_lit = consume() };
         }
@@ -30,9 +30,9 @@ public:
 
     std::optional<NodeExit> parse() {
         std::optional<NodeExit> exit_node;
-        while (peak().has_value())
+        while (peek().has_value())
         {
-            if (peak().value().type == TokenType::exit)
+            if (peek().value().type == TokenType::exit)
             {
                 consume();
                 if (auto node_expr = parse_expr())
@@ -43,7 +43,7 @@ public:
                     std::cerr << "Invalie ex[ression" << std::endl;
                     exit(EXIT_FAILURE);
                 }
-                if (peak().has_value() && peak().value().type == TokenType::semi)
+                if (peek().has_value() && peek().value().type == TokenType::semi)
                 {
                     consume();
                 }
@@ -60,7 +60,7 @@ public:
 
 private:
 
-    [[nodiscard]] inline std::optional<Token> peak(int ahead = 1) const
+    [[nodiscard]] inline std::optional<Token> peek(int ahead = 1) const
     {
         if (m_index + ahead > m_tokens.size())
             return {};
