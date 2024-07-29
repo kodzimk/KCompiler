@@ -32,5 +32,8 @@
     <ClInclude Include="src\generation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\arena.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

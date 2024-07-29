@@ -1,15 +1,15 @@
-#include<iostream>
-#include<fstream>
-#include<sstream>
-#include<optional>
-#include<vector>
+#include <fstream>
+#include <iostream>
+#include <optional>
+#include <sstream>
+#include <vector>
 
-#include"generation.h"
+#include "generation.h"
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
 
     std::string contents;
-
     {
         std::stringstream contents_stream;
         std::fstream input("test.kk", std::ios::in);
@@ -17,21 +17,18 @@ int main(int argc, char* argv[]) {
         contents = contents_stream.str();
     }
 
-    Tokenizer tokenizer(contents);
+    Tokenizer tokenizer(std::move(contents));
     std::vector<Token> tokens = tokenizer.tokenize();
 
-    Parser parser(tokens);
+    Parser parser(std::move(tokens));
     std::optional<NodeProg> prog = parser.parse_prog();
 
-    if (!prog.has_value())
-    {
-        std::cerr << "No exitr statment found";
+    if (!prog.has_value()) {
+        std::cerr << "Invalid program" << std::endl;
         exit(EXIT_FAILURE);
     }
 
     Generator generator(prog.value());
-
-
     {
         std::fstream file("out.asm", std::ios::out);
         file << generator.gen_prog();

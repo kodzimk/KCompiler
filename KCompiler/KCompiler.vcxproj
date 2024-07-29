@@ -134,6 +134,7 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\arena.h" />
     <ClInclude Include="src\generation.h" />
     <ClInclude Include="src\parser.h" />
     <ClInclude Include="src\tokenization.h" />
