@@ -80,7 +80,7 @@ public:
     std::optional<NodeTerm*> parse_term()
     {
         if (auto int_lit = try_consume(TokenType::int_lit)) {
-            auto term_int_lit = m_allocator.alloc<NodeTermIntLit>();
+            NodeTermIntLit* term_int_lit = m_allocator.alloc<NodeTermIntLit>();
             term_int_lit->int_lit = int_lit.value();
             auto term = m_allocator.alloc<NodeTerm>();
             term->var = term_int_lit;
@@ -202,7 +202,7 @@ public:
             && peek(1).value().type == TokenType::ident && peek(2).has_value()
             && peek(2).value().type == TokenType::eq) {
             consume();
-            auto stmt_let = m_allocator.alloc<NodeStmtLet>();
+            NodeStmtLet* stmt_let = m_allocator.alloc<NodeStmtLet>();
             stmt_let->ident = consume();
             consume();
             if (auto expr = parse_expr()) {
