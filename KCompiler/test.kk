@@ -1,6 +1,6 @@
-let x =  5 * 4 + 1 / 2;
-let y = 8;
-
+let y = (10 - 2 * 3) / 2;
+let x = 1; // first
+// first
 if (1) {
     exit(69);
 } elif (1) {
@@ -9,4 +9,6 @@ if (1) {
     exit(67);
 }
 
-exit(x);
+/*
+exit(4);
+*/
