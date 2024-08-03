@@ -1,3 +1,5 @@
 #!/bin/bash
-
-    echo "The name of first fruit is"
+nasm -felf64 out.asm
+ld -o out out.o
+./out
+echo $?
