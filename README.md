@@ -3,7 +3,15 @@
 First custom compiler creating for educational purposes and understand about compilers and assemly.
 
 # Plan 
-create custom language and compiler(i want to create clone of c for undeerstand more about memory and computer)
+create custom language and compiler
+1) math operations
+2) return
+3) if else elif
+4) variable(integer)
+5) comment
+6) error4 handliung
+7) bitwise operations
+8) logical operations
 
 # Build 
 1) open script folder and just run build.sh
