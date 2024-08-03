@@ -8,11 +8,18 @@
 
 int main(int argc, char* argv[])
 {
+    std::string inputFile;
+    
+    std::cout << "Enter file name: ";
+    std::cin >> inputFile;
+    if (inputFile.size() < 4 || inputFile[inputFile.size() - 1] != 'k' || inputFile[inputFile.size() - 2] != 'k' ||
+        inputFile[inputFile.size() - 3] != '.')
+        exit(EXIT_FAILURE);
 
     std::string contents;
     {
         std::stringstream contents_stream;
-        std::fstream input("test.kk", std::ios::in);
+        std::fstream input(inputFile, std::ios::in);
         contents_stream << input.rdbuf();
         contents = contents_stream.str();
     }
