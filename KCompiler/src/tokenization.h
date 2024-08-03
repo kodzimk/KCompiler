@@ -3,15 +3,33 @@
 #include <string>
 #include <vector>
 
-enum class TokenType { exit, int_lit, semi, open_paren, close_paren, ident, let, eq, plus, star, sub, div };
+enum class TokenType {
+    exit,
+    int_lit,
+    semi,
+    open_paren,
+    close_paren,
+    ident,
+    let,
+    eq,
+    plus,
+    star,
+    minus,
+    fslash,
+    open_curly,
+    close_curly,
+    if_,
+    elif,
+    else_,
+};
 
-std::optional<int> bin_prec(TokenType type)
+inline std::optional<int> bin_prec(const TokenType type)
 {
     switch (type) {
-    case TokenType::sub:
+    case TokenType::minus:
     case TokenType::plus:
         return 0;
-    case TokenType::div:
+    case TokenType::fslash:
     case TokenType::star:
         return 1;
     default:
@@ -26,12 +44,12 @@ struct Token {
 
 class Tokenizer {
 public:
-    inline explicit Tokenizer(std::string src)
+    explicit Tokenizer(std::string src)
         : m_src(std::move(src))
     {
     }
 
-    inline std::vector<Token> tokenize()
+    std::vector<Token> tokenize()
     {
         std::vector<Token> tokens;
         std::string buf;
@@ -49,6 +67,18 @@ public:
                     tokens.push_back({ .type = TokenType::let });
                     buf.clear();
                 }
+                else if (buf == "if") {
+                    tokens.push_back({ .type = TokenType::if_ });
+                    buf.clear();
+                }
+                else if (buf == "elif") {
+                    tokens.push_back({ .type = TokenType::elif });
+                    buf.clear();
+                }
+                else if (buf == "else") {
+                    tokens.push_back({ .type = TokenType::else_ });
+                    buf.clear();
+                }
                 else {
                     tokens.push_back({ .type = TokenType::ident, .value = buf });
                     buf.clear();
@@ -61,6 +91,29 @@ public:
                 }
                 tokens.push_back({ .type = TokenType::int_lit, .value = buf });
                 buf.clear();
+            }
+            else if (peek().value() == '/' && peek(1).has_value() && peek(1).value() == '/') {
+                consume();
+                consume();
+                while (peek().has_value() && peek().value() != '\n') {
+                    consume();
+                }
+            }
+            else if (peek().value() == '/' && peek(1).has_value() && peek(1).value() == '*') {
+                consume();
+                consume();
+                while (peek().has_value()) {
+                    if (peek().value() == '*' && peek(1).has_value() && peek(1).value() == '/') {
+                        break;
+                    }
+                    consume();
+                }
+                if (peek().has_value()) {
+                    consume();
+                }
+                if (peek().has_value()) {
+                    consume();
+                }
             }
             else if (peek().value() == '(') {
                 consume();
@@ -88,11 +141,19 @@ public:
             }
             else if (peek().value() == '-') {
                 consume();
-                tokens.push_back({ .type = TokenType::sub });
+                tokens.push_back({ .type = TokenType::minus });
             }
             else if (peek().value() == '/') {
                 consume();
-                tokens.push_back({ .type = TokenType::div });
+                tokens.push_back({ .type = TokenType::fslash });
+            }
+            else if (peek().value() == '{') {
+                consume();
+                tokens.push_back({ .type = TokenType::open_curly });
+            }
+            else if (peek().value() == '}') {
+                consume();
+                tokens.push_back({ .type = TokenType::close_curly });
             }
             else if (std::isspace(peek().value())) {
                 consume();
@@ -107,17 +168,15 @@ public:
     }
 
 private:
-    [[nodiscard]] inline std::optional<char> peek(int offset = 0) const
+    [[nodiscard]] std::optional<char> peek(size_t offset = 0) const
     {
         if (m_index + offset >= m_src.length()) {
             return {};
         }
-        else {
-            return m_src.at(m_index + offset);
-        }
+        return m_src.at(m_index + offset);
     }
 
-    inline char consume()
+    char consume()
     {
         return m_src.at(m_index++);
     }
