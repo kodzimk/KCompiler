@@ -17,6 +17,7 @@
   <ItemGroup>
     <None Include="test.kk" />
     <None Include="run.sh" />
+    <None Include="start.sh" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">

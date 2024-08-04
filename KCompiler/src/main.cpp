@@ -40,6 +40,7 @@ int main(int argc, char* argv[])
         std::fstream file("out.asm", std::ios::out);
         file << generator.gen_prog();
     }
+    system("bash");
 
     return EXIT_SUCCESS;
 }
